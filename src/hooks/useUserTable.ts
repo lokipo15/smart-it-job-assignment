@@ -5,7 +5,7 @@ import { fetchUsers } from "../features/users/usersSlice";
 
 export default function useUserTable() {
     const dispatch = useDispatch<AppDispatch>();
-    const { filteredUsers, status, error } = useSelector((state: RootState) => state.users);
+    const { filteredUsers, status, error, sort } = useSelector((state: RootState) => state.users);
 
     useEffect(() => {
         if (status === 'uninitialized') {
@@ -13,5 +13,5 @@ export default function useUserTable() {
         }
     }, [status, dispatch]);
 
-    return { filteredUsers, status, error };
+    return { filteredUsers, status, error, sort };
 }

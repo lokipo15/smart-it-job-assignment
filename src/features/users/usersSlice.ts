@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../../types/User";
 import { UsersState } from "../../types/UsersState";
+import sortUsers from "../../helpers/sortUsers";
 
 const initialState: UsersState = {
     status: 'uninitialized',
@@ -10,6 +11,10 @@ const initialState: UsersState = {
         email: '',
         phone: '',
       },
+    sort: {
+      field: null,
+      order: null,
+    },
     filteredUsers: [],
     error: null
 }
@@ -43,7 +48,43 @@ const usersSlice = createSlice({
                 return userValue.includes(filterValue);
               });
             });
+
+            if (state.sort.field && state.sort.order) {
+                sortUsers(state.filteredUsers, state.sort.field, state.sort.order);
+            }
         },
+
+        sortUsersByField: (state, action: PayloadAction<{ field: keyof User}>) => {
+            const { field } = action.payload;
+
+            if (state.sort.field === field) {
+                // If the field is already being sorted, toggle the order
+                if (state.sort.order === 'desc') {
+                    state.sort.order = "asc";
+                } 
+                else if (state.sort.order === 'asc') {
+                    state.sort.field = null;
+                    state.sort.order = null;
+                }
+                // First time sorting by this field
+                else {
+                    state.sort.order = 'desc';
+                }
+            } 
+            // New sort field
+            else {
+                state.sort.field = field;
+                state.sort.order = 'asc';
+            }
+
+            if (state.sort.field && state.sort.order) {
+                sortUsers(state.filteredUsers, state.sort.field, state.sort.order);
+            } 
+            // Reset table to original order
+            else {
+                state.filteredUsers = [...state.users];
+            }
+        }
     },
 
     // Handle fetchUsers state
@@ -69,5 +110,5 @@ const usersSlice = createSlice({
     }
 });
 
-export const { filterUsers } = usersSlice.actions;
+export const { filterUsers, sortUsersByField } = usersSlice.actions;
 export default usersSlice.reducer;
