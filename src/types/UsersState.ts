@@ -7,6 +7,7 @@ export interface UsersState {
     filteredUsers: User[];
     filters: {
         name: string;
+        username: string;
         email: string;
         phone: string;
       };
