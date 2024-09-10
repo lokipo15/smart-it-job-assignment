@@ -39,7 +39,7 @@ describe('UsersTable test', () => {
     });
 
     render(<UsersTable />);
-    expect(screen.getByText('No users with the specified filters found.')).toBeDefined();
+    expect(screen.getByText('No users with specified filters found.')).toBeDefined();
   });
 
   test('renders user table', () => {
