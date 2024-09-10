@@ -22,8 +22,8 @@ import { SortOrder } from "../types/UsersState";
 
 export default function sortUsers(users: User[], field: keyof User, order: SortOrder) {
     users.sort((a, b) => {
-        if (a[field] < b[field]) return order === 'asc' ? -1 : 1;
-        if (a[field] > b[field]) return order === 'asc' ? 1 : -1;
+        if (a[field] < b[field]) return order === 'asc' ? 1 : -1;
+        if (a[field] > b[field]) return order === 'asc' ? -1 : 1;
         return 0;
     });
 }

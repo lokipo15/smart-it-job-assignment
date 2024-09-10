@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../../types/User";
 import { UsersState } from "../../types/UsersState";
 import sortUsers from "../../helpers/sortUsers";
+import applyFilters from "../../helpers/applyFilters";
 
 const initialState: UsersState = {
     status: 'uninitialized',
@@ -35,32 +36,21 @@ const usersSlice = createSlice({
             state.filters[field as keyof typeof state.filters] = value.toLowerCase();
             
             // Filter the users based on the new filters
-            state.filteredUsers = state.users.filter((user) => {
-              return Object.entries(state.filters).every(([key, filterValue]) => {
+            state.filteredUsers = applyFilters(state.users, state.filters);
 
-                // No filter specified for this field
-                if (!filterValue) return true;
-
-                // Get the user's value for this field
-                const userValue = user[key as keyof User]?.toString().toLowerCase();
-
-                // Check if the user's value includes the filter value
-                return userValue.includes(filterValue);
-              });
-            });
-
+            // If sorting is active, apply it
             if (state.sort.field && state.sort.order) {
                 sortUsers(state.filteredUsers, state.sort.field, state.sort.order);
             }
         },
 
-        sortUsersByField: (state, action: PayloadAction<{ field: keyof User}>) => {
-            const { field } = action.payload;
+        sortUsersByField: (state, action: PayloadAction<keyof User>) => {
+            const field = action.payload;
 
             if (state.sort.field === field) {
                 // If the field is already being sorted, toggle the order
                 if (state.sort.order === 'desc') {
-                    state.sort.order = "asc";
+                    state.sort.order = 'asc';
                 } 
                 else if (state.sort.order === 'asc') {
                     state.sort.field = null;
@@ -74,16 +64,16 @@ const usersSlice = createSlice({
             // New sort field
             else {
                 state.sort.field = field;
-                state.sort.order = 'asc';
+                state.sort.order = 'desc';
             }
 
+            // Apply filters
+            state.filteredUsers = applyFilters(state.users, state.filters);
+
+            // Apply sorting
             if (state.sort.field && state.sort.order) {
                 sortUsers(state.filteredUsers, state.sort.field, state.sort.order);
             } 
-            // Reset table to original order
-            else {
-                state.filteredUsers = [...state.users];
-            }
         }
     },
 

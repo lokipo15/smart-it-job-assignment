@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { useEffect } from "react";
-import { fetchUsers } from "../features/users/usersSlice";
+import { fetchUsers, sortUsersByField } from "../features/users/usersSlice";
+import { User } from "../types/User";
 
 export default function useUserTable() {
     const dispatch = useDispatch<AppDispatch>();
@@ -13,5 +14,10 @@ export default function useUserTable() {
         }
     }, [status, dispatch]);
 
-    return { filteredUsers, status, error, sort };
+
+    const handleSort = (field: keyof User) => {
+        dispatch(sortUsersByField(field));
+    };
+
+    return { filteredUsers, status, error, sort, handleSort };
 }
