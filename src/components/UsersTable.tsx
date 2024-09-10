@@ -1,8 +1,21 @@
 import { User } from '../types/User';
 import useUserTable from '../hooks/useUserTable';
+import UsersTableEntry from './UsersTableEntry';
+import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react';
 
 export default function UserTable() {
-  const { filteredUsers, status, error } = useUserTable();
+  const { filteredUsers, status, error, sort, handleSort } = useUserTable();
+
+  // Render the proper icon depending on the sort state
+  const renderSortIcon = (field: keyof User) => {
+    if (sort.field !== field) 
+      return <ChevronsUpDown className='inline-block ml-1 w-4 h-4 text-gray-400' />;
+
+    if (sort.order === 'desc')
+      return <ChevronDown className='inline-block ml-1 w-4 h-4 text-blue-500' />;
+
+    return <ChevronUp className='inline-block ml-1 w-4 h-4 text-blue-500' />;
+  }
 
   if (status === 'loading') {
     return <div className="flex justify-center items-center">Loading...</div>;
@@ -13,25 +26,28 @@ export default function UserTable() {
   }
 
   if (filteredUsers.length === 0) {
-    return <div className="flex justify-center items-center">No users with the specified filters found.</div>;
+    return <div className="flex justify-center items-center">No users with specified filters found.</div>;
   }
 
   return (
-    <table className="min-w-full bg-white border border-gray-300">
+    <table className="min-w-full mx-auto bg-white border border-gray-300">
       <thead>
-        <tr>
-          <th className="py-2 px-4 border-b">Name</th>
-          <th className="py-2 px-4 border-b">Email</th>
-          <th className="py-2 px-4 border-b">Phone</th>
+        <tr className='bg-gray-200'>
+          {["name", "username", "email", "phone"].map((field) => (
+            <th 
+              key={field} 
+              className={"py-2 w-1/4 px-4 border-b text-left cursor-pointer " + (sort.field === field ? "bg-gray-300" : "")}
+              onClick={() => handleSort(field as keyof User)}
+              >
+                {field.charAt(0).toUpperCase() + field.slice(1)}
+                {renderSortIcon(field as keyof User)}
+              </th>
+          ))}
         </tr>
       </thead>
       <tbody>
-        {filteredUsers.map((user: User) => (
-          <tr key={user.id}>
-            <td className="py-2 px-4 border-b">{user.name}</td>
-            <td className="py-2 px-4 border-b">{user.email}</td>
-            <td className="py-2 px-4 border-b">{user.phone}</td>
-          </tr>
+        {filteredUsers.map((user: User, index: number) => (
+          <UsersTableEntry key={user.id} user={user} colored={index % 2 === 1} />
         ))}
       </tbody>
     </table>
