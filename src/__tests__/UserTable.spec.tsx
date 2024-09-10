@@ -13,6 +13,7 @@ describe('UsersTable test', () => {
     vi.mocked(useUserTable).mockReturnValue({
       status: 'loading',
       filteredUsers: [],
+      sort: { field: null, order: null },
       error: null
     });
 
@@ -24,6 +25,7 @@ describe('UsersTable test', () => {
     vi.mocked(useUserTable).mockReturnValue({
       status: 'error',
       filteredUsers: [],
+      sort: { field: null, order: null },
       error: 'Error message'
     });
 
@@ -35,7 +37,8 @@ describe('UsersTable test', () => {
     vi.mocked(useUserTable).mockReturnValue({
       status: 'success',
       filteredUsers: [],
-      error: null
+      error: null,
+      sort: { field: null, order: null }
     });
 
     render(<UsersTable />);
@@ -51,7 +54,8 @@ describe('UsersTable test', () => {
     vi.mocked(useUserTable).mockReturnValue({
       status: 'success',
       filteredUsers: mockUsers,
-      error: null
+      error: null,
+      sort: { field: null, order: null }
     });
 
     render(<UsersTable />);
