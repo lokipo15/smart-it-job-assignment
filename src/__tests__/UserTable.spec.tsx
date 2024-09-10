@@ -14,7 +14,8 @@ describe('UsersTable test', () => {
       status: 'loading',
       filteredUsers: [],
       sort: { field: null, order: null },
-      error: null
+      error: null,
+      handleSort: () => {}
     });
 
     render(<UsersTable />);
@@ -26,7 +27,8 @@ describe('UsersTable test', () => {
       status: 'error',
       filteredUsers: [],
       sort: { field: null, order: null },
-      error: 'Error message'
+      error: 'Error message',
+      handleSort: () => {}
     });
 
     render(<UsersTable />);
@@ -38,7 +40,8 @@ describe('UsersTable test', () => {
       status: 'success',
       filteredUsers: [],
       error: null,
-      sort: { field: null, order: null }
+      sort: { field: null, order: null },
+      handleSort: () => {}
     });
 
     render(<UsersTable />);
@@ -55,7 +58,8 @@ describe('UsersTable test', () => {
       status: 'success',
       filteredUsers: mockUsers,
       error: null,
-      sort: { field: null, order: null }
+      sort: { field: null, order: null },
+      handleSort: () => {}
     });
 
     render(<UsersTable />);
