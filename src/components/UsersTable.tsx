@@ -30,7 +30,7 @@ export default function UserTable() {
   }
 
   return (
-    <table className="min-w-full mx-auto bg-white border border-gray-300">
+    <table className="w-full bg-white border border-gray-300 overflow-auto">
       <thead>
         <tr className='bg-gray-200'>
           {["name", "username", "email", "phone"].map((field) => (

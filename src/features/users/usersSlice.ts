@@ -9,6 +9,7 @@ const initialState: UsersState = {
     users: [],
     filters: {
         name: '',
+        username: '',
         email: '',
         phone: '',
       },
@@ -44,6 +45,19 @@ const usersSlice = createSlice({
             }
         },
 
+        clearFilters: (state) => {
+            // Clear the filters
+            state.filters = initialState.filters;
+
+            // Reset the filteredUsers to the original users
+            state.filteredUsers = state.users;
+
+            // If sorting is active, apply it
+            if (state.sort.field && state.sort.order) {
+                sortUsers(state.filteredUsers, state.sort.field, state.sort.order);
+            }
+        },
+        
         sortUsersByField: (state, action: PayloadAction<keyof User>) => {
             const field = action.payload;
 
@@ -100,5 +114,5 @@ const usersSlice = createSlice({
     }
 });
 
-export const { filterUsers, sortUsersByField } = usersSlice.actions;
+export const { filterUsers, clearFilters, sortUsersByField } = usersSlice.actions;
 export default usersSlice.reducer;
