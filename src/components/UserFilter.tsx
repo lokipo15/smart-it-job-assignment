@@ -10,21 +10,27 @@ export default function UserFilter() {
   };
 
   return (
-    <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div className="mb-4 min-w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       <input
-        type="text"
+        type="search"
         placeholder="Filter by name..."
         onChange={handleFilterChange('name')}
         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
-        type="text"
+        type="search"
+        placeholder="Filter by username..."
+        onChange={handleFilterChange('username')}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <input
+        type="search"
         placeholder="Filter by email..."
         onChange={handleFilterChange('email')}
         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
-        type="text"
+        type="search"
         placeholder="Filter by phone..."
         onChange={handleFilterChange('phone')}
         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
