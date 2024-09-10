@@ -1,53 +1,54 @@
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { describe, test, expect, vi } from 'vitest';
 import UsersTable from '../components/UsersTable';
 import useUserTable from '../hooks/useUserTable';
+import { User } from '../types/User';
 
 // Mock the useUserTable hook
-jest.mock('../hooks/useUserTable');
+vi.mock('../hooks/useUserTable');
 
-describe('UsersTable', () => {
+describe('UsersTable test', () => {
 
   test('renders loading state', () => {
-    (useUserTable as jest.Mock).mockReturnValue({
+    vi.mocked(useUserTable).mockReturnValue({
       status: 'loading',
       filteredUsers: [],
       error: null
     });
 
     render(<UsersTable />);
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByText('Loading...')).toBeDefined();
   });
 
   test('renders error state', () => {
-    (useUserTable as jest.Mock).mockReturnValue({
+    vi.mocked(useUserTable).mockReturnValue({
       status: 'error',
       filteredUsers: [],
       error: 'Error message'
     });
 
     render(<UsersTable />);
-    expect(screen.getByText('Error: Error message')).toBeInTheDocument();
+    expect(screen.getByText('Error: Error message')).toBeDefined();
   });
 
   test('renders empty state', () => {
-    (useUserTable as jest.Mock).mockReturnValue({
+    vi.mocked(useUserTable).mockReturnValue({
       status: 'success',
       filteredUsers: [],
       error: null
     });
 
     render(<UsersTable />);
-    expect(screen.getByText('No users with the specified filters found.')).toBeInTheDocument();
+    expect(screen.getByText('No users with the specified filters found.')).toBeDefined();
   });
 
   test('renders user table', () => {
-    const mockUsers = [
-      { id: 1, name: 'John Doe', email: 'john@example.com', phone: '123-456-7890' },
-      { id: 2, name: 'Jane Smith', email: 'jane@example.com', phone: '098-765-4321' }
+    const mockUsers: User[] = [
+      { id: 1, name: 'John Doe', username: 'john123', email: 'john@example.com', phone: '123-456-7890' },
+      { id: 2, name: 'Jane Smith', username: 'jane456', email: 'jane@example.com', phone: '098-765-4321' }
     ];
 
-    (useUserTable as jest.Mock).mockReturnValue({
+    vi.mocked(useUserTable).mockReturnValue({
       status: 'success',
       filteredUsers: mockUsers,
       error: null
@@ -55,14 +56,14 @@ describe('UsersTable', () => {
 
     render(<UsersTable />);
     
-    expect(screen.getByText('Name')).toBeInTheDocument();
-    expect(screen.getByText('Email')).toBeInTheDocument();
-    expect(screen.getByText('Phone')).toBeInTheDocument();
+    expect(screen.getByText('Name')).toBeDefined();
+    expect(screen.getByText('Email')).toBeDefined();
+    expect(screen.getByText('Phone')).toBeDefined();
     
     mockUsers.forEach(user => {
-      expect(screen.getByText(user.name)).toBeInTheDocument();
-      expect(screen.getByText(user.email)).toBeInTheDocument();
-      expect(screen.getByText(user.phone)).toBeInTheDocument();
+      expect(screen.getByText(user.name)).toBeDefined();
+      expect(screen.getByText(user.email)).toBeDefined();
+      expect(screen.getByText(user.phone)).toBeDefined();
     });
   });
 
